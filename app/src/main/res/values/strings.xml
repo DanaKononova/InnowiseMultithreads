@@ -5,4 +5,17 @@
     <string name="docks">Docks:</string>
     <string name="ships_in_tunnel">Корабли в туннеле</string>
     <string name="leaved_ships">Покинувшие корабли</string>
+    <string name="trucks">Грузовики:</string>
+    <string name="cars">Легковые:</string>
+    <string name="motorcycles">Мотоциклы:</string>
+    <string name="next">Next</string>
+    <string name="speed">Введите скорость</string>
+    <string name="puncture_percent">Введите вероятность прокола</string>
+    <string name="cargo_weight">Вес груза</string>
+    <string name="passenger_count">Количество пассажиров</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="sidecar">Есть коляска</string>
+    <string name="circle_length">Длина круга</string>
+    <string name="start_race">Начать гонку</string>
 </resources>
