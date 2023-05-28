@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">InnowiseMultithreads</string>
+    <string name="ships">Ships:</string>
+    <string name="tunnel">Tunnel:</string>
+    <string name="docks">Docks:</string>
+    <string name="ships_in_tunnel">Корабли в туннеле</string>
+    <string name="leaved_ships">Покинувшие корабли</string>
 </resources>
