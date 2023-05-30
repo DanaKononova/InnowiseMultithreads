@@ -9,10 +9,13 @@ import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import com.example.innowisemultithreads.R
 import com.example.innowisemultithreads.databinding.ActivityRaceBinding
+import kotlinx.coroutines.*
 
 class RaceActivity : AppCompatActivity() {
 
-    val vehicles = mutableListOf<Vehicle>()
+    private val vehicles = mutableListOf<Vehicle>()
+    private var circleLength = 0
+    private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +27,7 @@ class RaceActivity : AppCompatActivity() {
                 val trucks = binding.trucksEditText.text.toString().toInt()
                 val cars = binding.carsEditText.text.toString().toInt()
                 val moto = binding.motoEditText.text.toString().toInt()
-                val circleLength = binding.circleLengthEditText.text.toString().toInt()
+                circleLength = binding.circleLengthEditText.text.toString().toInt()
 
                 for (i in 0 until trucks) {
                     showTruckDialog()
@@ -38,9 +41,41 @@ class RaceActivity : AppCompatActivity() {
 
                 binding.nextButton.text = getString(R.string.start_race)
                 binding.nextButton.setOnClickListener {
+                    startRace()
                     printStartOfTheRace()
                 }
             }
+        }
+    }
+
+    private fun startRace() {
+        job = GlobalScope.launch(Dispatchers.Main) {
+            val deferredList = mutableListOf<Deferred<Unit>>()
+
+            vehicles.forEach { vehicle ->
+                val deferred = async { startVehicleRace(vehicle) }
+                deferredList.add(deferred)
+            }
+
+            deferredList.awaitAll()
+
+            printEndOfTheRace()
+        }
+    }
+
+    private suspend fun startVehicleRace(vehicle: Vehicle) {
+        while (vehicle.distanceTraveled < circleLength) {
+            if (!vehicle.moveOneUnit()) {
+                break
+            }
+            vehicle.printStatus()
+            delay(1000)
+        }
+    }
+
+    private fun printEndOfTheRace() {
+        for (i in 0 until vehicles.size) {
+            vehicles[i].printStatus()
         }
     }
 
