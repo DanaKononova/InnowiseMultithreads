@@ -1,7 +1,7 @@
 package com.example.innowisemultithreads.circle_race
 
 class Truck(speed: Int, puncturePercent: Double, val cargoWeight: Int) :
-    Vehicle(speed, puncturePercent) {
+    Vehicle(speed - cargoWeight / 10, puncturePercent) {
     override val name = "Грузовик"
 
     override fun printInfo() {

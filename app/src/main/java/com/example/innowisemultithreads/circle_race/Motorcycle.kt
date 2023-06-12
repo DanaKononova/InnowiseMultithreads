@@ -1,7 +1,7 @@
 package com.example.innowisemultithreads.circle_race
 
 class Motorcycle(speed: Int, puncturePercent: Double, val hasSidecar: Boolean) :
-    Vehicle(speed, puncturePercent) {
+    Vehicle(if (hasSidecar) speed - 3 else speed, puncturePercent) {
     override val name = "Мотоцикл"
 
     override fun printInfo() {

@@ -1,11 +1,13 @@
 package com.example.innowisemultithreads.circle_race
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.innowisemultithreads.R
 import com.example.innowisemultithreads.databinding.ActivityRaceBinding
@@ -16,11 +18,19 @@ class RaceActivity : AppCompatActivity() {
     private val vehicles = mutableListOf<Vehicle>()
     private var circleLength = 0
     private var job: Job? = null
+    private lateinit var firstCar: TextView
+    private lateinit var secondCar: TextView
+    private lateinit var thirdCar: TextView
+    private var winners = mutableListOf<Vehicle>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityRaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        firstCar = findViewById(R.id.firstCar)
+        secondCar = findViewById(R.id.secondCar)
+        thirdCar = findViewById(R.id.thirdCar)
 
         binding.nextButton.setOnClickListener {
             if (binding.trucksEditText.text.isNotEmpty() && binding.carsEditText.text.isNotEmpty() && binding.motoEditText.text.isNotEmpty() && binding.circleLengthEditText.text.isNotEmpty()) {
@@ -41,6 +51,10 @@ class RaceActivity : AppCompatActivity() {
 
                 binding.nextButton.text = getString(R.string.start_race)
                 binding.nextButton.setOnClickListener {
+                    firstCar.text = ""
+                    secondCar.text = ""
+                    thirdCar.text = ""
+                    winners.clear()
                     startRace()
                     printStartOfTheRace()
                 }
@@ -49,7 +63,7 @@ class RaceActivity : AppCompatActivity() {
     }
 
     private fun startRace() {
-        job = GlobalScope.launch(Dispatchers.Main) {
+        job = CoroutineScope(Dispatchers.Main).launch {
             val deferredList = mutableListOf<Deferred<Unit>>()
 
             vehicles.forEach { vehicle ->
@@ -59,6 +73,7 @@ class RaceActivity : AppCompatActivity() {
 
             deferredList.awaitAll()
 
+            setWinnerTable()
             printEndOfTheRace()
         }
     }
@@ -66,11 +81,13 @@ class RaceActivity : AppCompatActivity() {
     private suspend fun startVehicleRace(vehicle: Vehicle) {
         while (vehicle.distanceTraveled < circleLength) {
             if (!vehicle.moveOneUnit()) {
-                break
+                setStatus(vehicle.printBroke(), vehicle)
+                delay(6000)
             }
-            vehicle.printStatus()
+            setStatus(vehicle.printStatus(), vehicle)
             delay(1000)
         }
+        winners.add(vehicle)
     }
 
     private fun printEndOfTheRace() {
@@ -82,6 +99,25 @@ class RaceActivity : AppCompatActivity() {
     private fun printStartOfTheRace() {
         for (i in 0 until vehicles.size) {
             vehicles[i].printInfo()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setStatus(status: String, car: Vehicle){
+        if (car is Car) {
+            firstCar.text = "Легковушка: $status"
+        } else if (car is Motorcycle){
+            secondCar.text = "Мотоцикл: $status"
+        } else thirdCar.text = "Грузовик: $status"
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setWinnerTable(){
+        firstCar.text = ""
+        secondCar.text = ""
+        thirdCar.text = ""
+        for (i in 1..winners.size){
+            firstCar.append("$i место: ${winners[i-1].name} \n")
         }
     }
 
