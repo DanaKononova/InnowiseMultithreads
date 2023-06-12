@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/speedEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/speed"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/puncturePercentEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/puncture_percent"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:text="@string/sidecar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/choiceRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/yesRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/yes" />
+
+        <RadioButton
+            android:id="@+id/noRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no" />
+
+    </RadioGroup>
+</LinearLayout>
