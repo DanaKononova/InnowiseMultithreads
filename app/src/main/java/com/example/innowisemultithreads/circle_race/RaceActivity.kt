@@ -55,6 +55,9 @@ class RaceActivity : AppCompatActivity() {
                     secondCar.text = ""
                     thirdCar.text = ""
                     winners.clear()
+                    vehicles.forEach{
+                        it.distanceTraveled = 0.0
+                    }
                     startRace()
                     printStartOfTheRace()
                 }
